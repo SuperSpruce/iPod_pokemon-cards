@@ -8,6 +8,7 @@ public class Player
     private ArrayList<Card> deck;
     private ArrayList<Card> discard;
     private ArrayList<Card> tieCards;
+    private int itemHP;
     
     public Player(String n, int a)
     {
@@ -17,11 +18,12 @@ public class Player
         tieCards = new ArrayList<Card>();
         double r = 0;
         int c = 0;
+        int itemHP = 0;
         
         while(deck.size() < a)
         {
             r = Math.random();
-            c = (int)(Math.random() * 81);
+            c = (int)(Math.random() * 162);
             if(Card.rarities[c] == 'c' || (Card.rarities[c] == 'r' && r < 0.3) || (Card.rarities[c] == 'e' && r < 0.1) || (Card.rarities[c] == 'l' && r < 0.02))
                 deck.add(new Card(c));
         }
@@ -33,6 +35,19 @@ public class Player
     {
         return name;
     }
+    public int getItemHP()
+    {
+        return itemHP;
+    }
+    
+    public void setItemHP(int a)
+    {
+        itemHP = a;
+    }
+    public void addItemHP(int a)
+    {
+        itemHP += a;
+    }
     
     public int deckSize()
     {
@@ -42,15 +57,29 @@ public class Player
     public void shuffle()
     {
         Collections.shuffle(deck);
-        System.out.println();
         System.out.println(name + " shuffles his/her deck.");
     }
     
     public Card draw()
     {
         Card a = deck.remove(deck.size() - 1);
-        System.out.println(name + " pulls " + a.toString() + ".");
-        return a;
+        if(a.getType().equals("item") && (this.deckSize() > 0 || this.discard.size() > 0))
+        {
+            if(this.deckSize() == 0)
+            {
+                transfer();
+                shuffle();
+            }
+            System.out.println(name + " pulls " + a.getName() + ", a " + a.getHP() + " HP item.");
+            this.tieCards.add(a);
+            this.addItemHP(a.getHP());
+            return draw();
+        }
+        else
+        {
+            System.out.println(name + " pulls " + a.toString() + ".");
+            return a;
+        }
     }
     
     public void discard(Card a)
