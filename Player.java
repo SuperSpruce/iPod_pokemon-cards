@@ -23,8 +23,8 @@ public class Player
         while(deck.size() < a)
         {
             r = Math.random();
-            c = (int)(Math.random() * 162);
-            if(Card.rarities[c] == 'c' || (Card.rarities[c] == 'r' && r < 0.3) || (Card.rarities[c] == 'e' && r < 0.1) || (Card.rarities[c] == 'l' && r < 0.02))
+            c = (int)(Math.random() * 324);
+            if(Card.rarities[c] == 'c' || (Card.rarities[c] == 'r' && r < 0.4) || (Card.rarities[c] == 'e' && r < 0.15) || (Card.rarities[c] == 'l' && r < 0.05))
                 deck.add(new Card(c));
         }
     }
